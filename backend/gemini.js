@@ -1,8 +1,9 @@
 import axios from "axios"
-const geminiResponse=async (command,assistantName,userName)=>{
-try {
-    const apiUrl=process.env.GEMINI_API_URL
-    const prompt = `You are a virtual assistant named ${assistantName} created by ${userName}. 
+const geminiResponse = async (command, assistantName, userName) => {
+    try {
+        const apiUrl = process.env.GEMINI_API_URL
+
+        const prompt = `You are a virtual assistant named ${assistantName} created by ${userName}. 
 You are not Google. You will now behave like a voice-enabled assistant.
 
 Your task is to understand the user's natural language input and respond with a JSON object like this:
@@ -35,8 +36,18 @@ Type meanings:
 - "get-month": if user asks for the current month.
 
 Important:
-- Use ${userName} agar koi puche tume kisne banaya 
+- Use ${userName} agar koi puche tume kisne banaya
 - Only respond with the JSON object, nothing else.
+
+- If user says "google par", "google pe", "search on google", then type must be "google-search".
+- If user says "youtube par", "youtube pe", "search on youtube", then type must be "youtube-search".
+- If user says "play", "song play karo", "video chalao", then type must be "youtube-play".
+- If user says "calculator kholo", then type must be "calculator-open".
+- If user says "instagram kholo", then type must be "instagram-open".
+- If user says "facebook kholo", then type must be "facebook-open".
+- If user asks weather or temperature, then type must be "weather-show".
+
+- Never return "general" for the above commands.
 
 
 now your userInput- ${command}
@@ -46,15 +57,21 @@ now your userInput- ${command}
 
 
 
-    const result=await axios.post(apiUrl,{
-    "contents": [{
-    "parts":[{"text": prompt}]
-    }]
-    })
-return result.data.candidates[0].content.parts[0].text
-} catch (error) {
-    console.log(error)
-}
+        const result = await axios.post(
+            `${apiUrl}?key=${process.env.GEMINI_API_KEY}`,
+            {
+                contents: [
+                    {
+                        parts: [{ text: prompt }]
+                    }
+                ]
+            }
+        )
+        return result.data.candidates[0].content.parts[0].text
+    } catch (error) {
+         console.error("GEMINI ERROR:", error.message);
+        return null
+    }
 }
 
 export default geminiResponse

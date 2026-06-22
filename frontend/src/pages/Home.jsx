@@ -68,6 +68,10 @@ function Home() {
 
   const handleCommand = (data) => {
     // console.log("HANDLE COMMAND:", data);
+    if (!data) {
+      console.log("No data received");
+      return;
+    }
 
     const { type, userInput, response } = data;
     speak(response);
@@ -198,10 +202,14 @@ function Home() {
 
       const data = await getGeminiResponse(transcript);
 
-      // console.log("GEMINI RESPONSE:", data);
+      if (!data) {
+        setAiText("Gemini service is unavailable");
+        setUserText("");
+        return;
+      }
 
       handleCommand(data);
-      setAiText(data.response);
+      setAiText(data.response || "");
       setUserText("");
     };
 

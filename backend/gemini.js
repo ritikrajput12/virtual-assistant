@@ -69,8 +69,15 @@ now your userInput- ${command}
         )
         return result.data.candidates[0].content.parts[0].text
     } catch (error) {
-         console.error("GEMINI ERROR:", error.message);
-        return null
+        console.log("GEMINI ERROR STATUS:", error.response?.status);
+        console.log("GEMINI ERROR DATA:", error.response?.data);
+        console.log("GEMINI ERROR MESSAGE:", error.message);
+
+        return JSON.stringify({
+            type: "general",
+            userInput: command,
+            response: "Gemini service is currently unavailable"
+        });
     }
 }
 

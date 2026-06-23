@@ -73,10 +73,26 @@ now your userInput- ${command}
         console.log("GEMINI ERROR DATA:", error.response?.data);
         console.log("GEMINI ERROR MESSAGE:", error.message);
 
+        if (error.response?.status === 503) {
+            return JSON.stringify({
+                type: "general",
+                userInput: command,
+                response: "Gemini is busy right now, please try again after a few moments."
+            });
+        }
+
+        if (error.response?.status === 429) {
+            return JSON.stringify({
+                type: "general",
+                userInput: command,
+                response: "Gemini quota exceeded. Please try again later."
+            });
+        }
+
         return JSON.stringify({
             type: "general",
             userInput: command,
-            response: "Gemini service is currently unavailable"
+            response: "Gemini service is currently unavailable."
         });
     }
 }

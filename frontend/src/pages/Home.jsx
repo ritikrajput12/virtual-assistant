@@ -193,54 +193,7 @@ function Home() {
 
       const transcript = e.results[e.results.length - 1][0].transcript.trim();
       // console.log("TRANSCRIPT:", transcript);
-
-      const command = transcript.toLowerCase();
-
-      if (command.includes("youtube")) {
-        handleCommand({
-          type: "youtube-search",
-          userInput: command.replace("youtube", "").trim(),
-          response: "Searching on YouTube"
-        });
-        return;
-      }
-
-      if (command.includes("google")) {
-        handleCommand({
-          type: "google-search",
-          userInput: command.replace("google", "").trim(),
-          response: "Searching on Google"
-        });
-        return;
-      }
-
-      if (command.includes("calculator")) {
-        handleCommand({
-          type: "calculator-open",
-          userInput: "",
-          response: "Opening calculator"
-        });
-        return;
-      }
-
-      if (command.includes("instagram")) {
-        handleCommand({
-          type: "instagram-open",
-          userInput: "",
-          response: "Opening Instagram"
-        });
-        return;
-      }
-
-      if (command.includes("facebook")) {
-        handleCommand({
-          type: "facebook-open",
-          userInput: "",
-          response: "Opening Facebook"
-        });
-        return;
-      }
-
+     
       setAiText("");
       setUserText(transcript);
       recognition.stop();

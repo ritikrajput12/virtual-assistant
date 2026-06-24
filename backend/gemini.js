@@ -57,16 +57,33 @@ now your userInput- ${command}
 
 
 
-        const result = await axios.post(
-            `${apiUrl}?key=${process.env.GEMINI_API_KEY}`,
-            {
-                contents: [
+        let result;
+
+        for (let i = 0; i < 3; i++) {
+            try {
+                result = await axios.post(
+                    `${apiUrl}?key=${process.env.GEMINI_API_KEY}`,
                     {
-                        parts: [{ text: prompt }]
+                        contents: [
+                            {
+                                parts: [{ text: prompt }]
+                            }
+                        ]
                     }
-                ]
+                );
+
+                break;
+            } catch (error) {
+
+                if (error.response?.status === 503 && i < 2) {
+                    console.log(`Retry ${i + 1}`);
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    continue;
+                }
+
+                throw error;
             }
-        )
+        }
         return result.data.candidates[0].content.parts[0].text
     } catch (error) {
         console.log("GEMINI ERROR STATUS:", error.response?.status);

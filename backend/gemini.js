@@ -3,6 +3,9 @@ const geminiResponse = async (command, assistantName, userName) => {
     try {
         const apiUrl = process.env.GEMINI_API_URL
 
+        console.log(process.env.GEMINI_API_URL);
+        console.log(process.env.GEMINI_API_KEY);
+
         const prompt = `You are a virtual assistant named ${assistantName} created by ${userName}. 
 You are not Google. You will now behave like a voice-enabled assistant.
 
@@ -18,8 +21,8 @@ Your task is to understand the user's natural language input and respond with a 
 
 Instructions:
 - "type": determine the intent of the user.
-- "userinput": original sentence the user spoke.
-- "response": A short voice-friendly reply, e.g., "Sure, playing it now", "Here's what I found", "Today is Tuesday", etc.
+- "userInput": original sentence the user spoke.
+- "response": A short, natural, voice-friendly reply that always includes the user's search query when the type is "google-search", "youtube-search", or "youtube-play".
 
 Type meanings:
 - "general": if it's a factual or informational question. aur agar koi aisa question puchta hai jiska answer tume pata hai usko bhi general ki category me rakho bas short answer dena
@@ -39,9 +42,21 @@ Important:
 - Use ${userName} agar koi puche tume kisne banaya
 - Only respond with the JSON object, nothing else.
 
-- If user says "google par", "google pe", "search on google", then type must be "google-search".
-- If user says "youtube par", "youtube pe", "search on youtube", then type must be "youtube-search".
-- If user says "play", "song play karo", "video chalao", then type must be "youtube-play".
+- For "google-search", the response must include what is being searched.
+  Example: "Searching Virat Kohli on Google."
+
+- For "youtube-search", the response must include what is being searched.
+  Example: "Searching Arijit Singh songs on YouTube."
+
+- For "youtube-play", the response must include the song or video name.
+  Example: "Playing Kesariya on YouTube."
+
+- Never reply with only "Sure", "Okay", "Done", or "Searching".
+- Always mention the search query in the response.
+
+- If the user wants to search anything on Google, return type "google-search".
+- If the user wants to search anything on YouTube, return type "youtube-search".
+- If the user wants to play any song, video, music, trailer, or audio, return type "youtube-play".
 - If user says "calculator kholo", then type must be "calculator-open".
 - If user says "instagram kholo", then type must be "instagram-open".
 - If user says "facebook kholo", then type must be "facebook-open".

@@ -74,39 +74,70 @@ function Home() {
     }
 
     const { type, userInput, response } = data;
-    speak(response);
 
     if (type === "google-search") {
-      const query = encodeURIComponent(userInput);
-      window.location.href = `https://www.google.com/search?q=${query}`;
+      speak(response);
+
+      setTimeout(() => {
+        const query = encodeURIComponent(userInput);
+         window.location.href = `https://www.google.com/search?q=${query}`;
+      }, 2500);
+
+      return;
     }
 
     if (type === "calculator-open") {
-      window.location.href =
-        `https://www.google.com/search?q=calculator`;
+      speak(response);
+
+      setTimeout(() => {
+        window.location.href = "https://www.google.com/search?q=calculator";
+      }, 2500);
+
+      return;
     }
 
     if (type === "instagram-open") {
-      window.location.href = "https://www.instagram.com/";
+      speak(response);
+
+      setTimeout(() => {
+        window.location.href = "https://www.instagram.com/";
+      }, 2500);
+
+      return;
     }
 
     if (type === "facebook-open") {
-      window.location.href = "https://www.facebook.com/";
+      speak(response);
+
+      setTimeout(() => {
+        window.location.href = "https://www.facebook.com/";
+      }, 2500);
+
+      return;
     }
 
     if (type === "weather-show") {
-      window.location.href =
-        "https://www.google.com/search?q=weather";
+      speak(response);
+
+      setTimeout(() => {
+        window.location.href = "https://www.google.com/search?q=weather";
+      }, 2500);
+
+      return;
     }
 
     if (type === "youtube-search" || type === "youtube-play") {
-      // console.log("OPENING YOUTUBE", userInput);
+      speak(response);
 
-      const query = encodeURIComponent(userInput);
+      setTimeout(() => {
+        const query = encodeURIComponent(userInput);
+        window.location.href =
+          `https://www.youtube.com/results?search_query=${query}`;
+      }, 2500);
 
-      window.location.href =
-        `https://www.youtube.com/results?search_query=${query}`;
+      return;
     }
+    speak(response);
   };
 
   useEffect(() => {
@@ -193,7 +224,7 @@ function Home() {
 
       const transcript = e.results[e.results.length - 1][0].transcript.trim();
       // console.log("TRANSCRIPT:", transcript);
-     
+
       setAiText("");
       setUserText(transcript);
       recognition.stop();
